@@ -11,6 +11,15 @@ Deploy to bluemix is currently broken. See: https://github.com/snowch/flask-mach
 - Upload NextBestOfferDepl.str to your Watson Machine Learning instance
 - Copy vcap-local.json-template to vcap-local.json
 - Edit vcap-local.json with your credentials
+
+#### Run locally
+
+- pip install -r requirements.txt 
+- python hello.py
+- Access the provided URL and enter the values
+
+#### Run on Bluemix
+
 - cf login
 - cf push ...
 - Access the provided URL and enter the values
