@@ -1,0 +1,12 @@
+ {
+  "pm-20": [
+   {
+    "credentials": {
+     "access_key": "changeme",
+     "password": "changeme",
+     "url": "changeme",
+     "username": "changeme"
+    }
+   }
+  ]
+}
