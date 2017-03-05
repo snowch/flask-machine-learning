@@ -36,15 +36,43 @@ app.config.update(
 @app.route('/')
 def runit():
     return '''
+        <!DOCTYPE html>
         <html>
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            </head>
             <body>
-                <form action="/getscore">
-                    <label for="context">Context</label>
-                    <input type="text" name="context" id="context"><br>
-                    <label for="age">Age</label>
-                    <input type="age" name="age" id="age"><br>
-                    <input type="submit" value="Submit">
-                </form>
+                <div class="container-fluid">
+                    <h2>Predictive Scoring Inputs:</h2>
+                    <p>Enter the values for your context and the age</p>
+                    <div class="row">
+                        <form action="/getscore">
+                            <div class="col-sm-4">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <label for="context">Context</label>
+                                        <input type="text" name="context" id="context" class="form-control">
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <label for="context">Customer ID</label>
+                                        <input type="text" value="10451" name="customer_id" id="customer_id" class="form-control">
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <input type="submit" value="Submit" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             <body>
         </html>
     '''
@@ -52,13 +80,13 @@ def runit():
 @app.route("/getscore")
 def hello():
 
-    age = int(request.args.get('age', None))
+    customer_id = int(request.args.get('customer_id', None))
     context = request.args.get('context', None)
 
     data = {
       "tablename":"InputData", 
       "header":["Customer ID","Offer1","Offer2","Offer3","Offer4","Offer5","Offer6","Offer7","Offer8","Offer9","Offer10","Offer11"], 
-      "data":[[age, "F", "F", "T", "T", "F", "T", "F", "F", "T", "T", "T"]]
+      "data":[[customer_id, "F", "F", "T", "T", "F", "T", "F", "F", "T", "T", "T"]]
     }
     url = "{0}/score/{1}?accesskey={2}".format(
                                             app.config['URL'], 
