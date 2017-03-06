@@ -52,7 +52,7 @@ def runit():
                             <div class="col-sm-4">
                                 <div class="row">
                                     <div class="col-xs-6">
-                                        <label for="context">Context</label>
+                                        <label for="context">Context ID</label>
                                         <input type="text" name="context" id="context" class="form-control">
                                     </div>
                                 </div>
@@ -96,7 +96,39 @@ def hello():
     headers = {'content-type': 'application/json'}
     response = requests.post(url, data=json.dumps(data), headers=headers)
 
-    return response.text
+    head = response.json()[0]['header']
+    data = response.json()[0]['data'][0]
+
+    tr = ''
+    for item in zip(head, data):
+        tr += '<tr><td style="font-weight:bold;">{0}</td><td>{1}</td></tr>'.format(item[0], item[1])
+
+    return '''
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+            </head>
+            <body>
+                <div class="container-fluid">
+                    <h2>Predictive Scoring Output</h2>
+                    <p>The output from the machine learning service:</p>
+                    <div class="row">
+                        <div class="col-sm-4">
+                          <table class="table">
+                            <tbody>
+                                {0}
+                            </tbody>
+                          </table>
+                        </div>
+                    </div>
+                    <a class="btn btn-info" href="/">Try again</a>
+                </div>
+            <body>
+        </html>
+    '''.format(tr)
 
 port = int(os.getenv('PORT', 8080))
 
