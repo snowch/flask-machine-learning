@@ -5,9 +5,11 @@ import logging
 
 logging.basicConfig(level=logging.DEBUG)
 
-from flask import Flask, request
+from flask import Flask, request, session
 
 app = Flask(__name__)
+
+app.secret_key = 'make_this_secret_in_production_environements'
 
 #if 'VCAP_SERVICES' in os.environ:
 #    vcap = json.loads(os.getenv('VCAP_SERVICES'))
@@ -35,6 +37,12 @@ app.config.update(
 
 @app.route('/')
 def runit():
+    
+    if 'context' in session:
+        context = session['context']
+    else:
+        context = ""
+
     return '''
         <!DOCTYPE html>
         <html>
@@ -53,7 +61,7 @@ def runit():
                                 <div class="row">
                                     <div class="col-xs-6">
                                         <label for="context">Context ID</label>
-                                        <input type="text" name="context" id="context" class="form-control">
+                                        <input type="text" value="{0}" name="context" id="context" class="form-control">
                                     </div>
                                 </div>
                                 <br/>
@@ -75,13 +83,18 @@ def runit():
                 </div>
             <body>
         </html>
-    '''
+    '''.format(context)
 
 @app.route("/getscore")
 def hello():
 
     customer_id = int(request.args.get('customer_id', None))
     context = request.args.get('context', None)
+
+    # save the context in the session so users don't have to keep typing it in
+    # when they run the example lots of times
+
+    session['context'] = context
 
     data = {
       "tablename":"InputData", 
@@ -134,4 +147,3 @@ port = int(os.getenv('PORT', 8080))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=port, debug=True)
-
